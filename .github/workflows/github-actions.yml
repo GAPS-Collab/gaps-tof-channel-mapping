@@ -1,0 +1,15 @@
+---
+name: Master Spreadsheet Validation
+on: [push]
+jobs:
+  check-inputs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install
+        run: |
+          sudo wget https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-linux-amd64 -O /usr/bin/jq && sudo chmod +x /usr/bin/jq
+          sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq && sudo chmod +x /usr/bin/yq
+          pip install pydantic
+      - name: Sanitize
+        run: make parse && git diff --exit-code
